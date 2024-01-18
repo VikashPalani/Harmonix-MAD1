@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100px; /* Increased the height for more space */
+        }
+
+        .logo {
+            max-width: 170px;
+            height: 100%;
+            margin-left: 10px;
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+        }
+
+        .left-section {
+            flex: 1;
+            background-color: #f2f2f2;
+            padding: 10px;
+            
+            overflow-y: auto; /* Added overflow-y for scrolling if needed */
+        }
+
+        .user-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .user-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 20px; /* Adjusted margin */
+        }
+
+        .user-details {
+            text-align: center;
+        }
+
+        .user-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .right-section {
+            flex: 11; /* Adjusted the flex value */
+            background-color: #fff;
+            padding: 20px;
+        }
+
+        .playlist-section {
+            text-align: left;
+            margin-top: 5px;
+        }
+
+        .playlist-heading {
+            font-size: 36px; /* Larger font size */
+            font-weight: bold;
+            margin-bottom: 0; /* Reset margin to zero */
+        }
+
+        .playlist-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .playlist-box {
+            flex: 0 0 calc(33.33% - 10px); /* Adjusted flex value and spacing */
+            height: 150px; /* Increased the height */
+            background-color: #f2f2f2; /* Light grey color */
+            border: 2px solid #E35F21; /* Orange border */
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px; /* Added margin for spacing */
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Hover effect transition */
+            color: #333; /* Text color */
+            font-size: 16px; /* Increased font size */
+        }
+
+        .playlist-box:hover {
+            background-color: #ccc; /* Darker grey on hover */
+        }
+
+        .separator-line {
+            margin-top: 20px;
+            border-top: 2px solid #ccc; /* Light grey color */
+        }
+
+        .table-container {
+            margin: 10px; /* 10px margin on left and right */
+        }
+
+        .table-heading {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px; /* Adjusted margin-bottom */
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px; /* Adjusted margin-top */
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center; /* Center-align text */
+        }
+
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .right-header {
+            text-align: right;
+        }
+
+        button {
+            padding: 8px 16px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button#songsListButton {
+            background-color: #E35F21;
+            color: #fff;
+            width: 150px;
+            height: 40px;
+        }
+
+        button#songsListButton:hover {
+            background-color: #FF7F50;
+        }
+
+        button.add-button {
+            background-color: #ccc; /* Grey color */
+            color: #fff;
+            width: 150px;
+            height: 40px;
+        }
+
+        button.add-button:hover {
+            background-color: #999; /* Darker grey on hover */
+        }
+
+        .form-container {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        input {
+            padding: 8px;
+            margin-bottom: 10px;
+            margin-top: 40px;
+            margin-left: 10px;
+            width:200px; /* Adjusted width */
+            box-sizing: border-box;
+        }
+
+        button#submit-button {
+            background-color: #E35F21;
+            color: #fff;
+            width: 200px; /* Adjusted width */
+            height: 40px;
+            
+            
+        }
+
+        button#submit-button:hover {
+            background-color: #FF7F50;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            margin-top: auto; /* Push the footer to the bottom */
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.7);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+    <title>Playlist Page</title>
+</head>
+<body>
+    <div class="header">
+        <div class="left-header">
+            <img class="logo" src="/static/Harmonix.png" alt="Logo">
+        </div>
+
+        <div class="playlist-heading">My Playlists</div>
+
+        <div class="right-header">
+            <button id="submit-button" onclick="location.href='/user'">Home</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="left-section">
+            <div class="user-section">
+                <img class="user-photo" src="/static/creator2.jpg" alt="User Photo">
+
+                <div class="user-details">
+                    <p class="user-name">Your Name</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-section">
+            <div class="playlist-section">
+                <div class="playlist-container">
+                    {% for playlist_name in unique_playlists %}
+                        <button class="playlist-box" onclick="displaySongs('{{ playlist_name }}')">{{ playlist_name }}</button>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="separator-line"></div>
+            <div id="songs-container" class="table-container">
+                <!-- Songs will be displayed here -->
+            </div>
+        
+            
+            <div class="table-container">
+                <div class="table-heading">Create New Playlist</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Song Name</th>
+                            <th>Creator Name</th>
+                            <th>Add to Playlist</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for song in songs %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ song.song_name }}</td>
+                                <td>{{ song.creator_name }}</td>
+                                <td>
+                                    <form action="{{ url_for('add_to_playlist', song_id=song.song_id) }}" method="post">
+                                        <input type="text" name="playlist_name" placeholder="Enter Playlist Name" required>
+                                        <button class="add-button" type="submit">Add</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Your playlist content goes here -->
+
+    <footer>
+        <p>&copy; Harmonix. All rights reserved.</p>
+        <p>Contact: contact@harmonix.com</p>
+    </footer>
+    <div id="songsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalSongsContainer">
+                <!-- Songs will be displayed here -->
+            </div>
+        </div>
+    </div>
+    <script>
+        function displaySongs(playlistName) {
+            // Use Ajax or fetch API to get songs for the selected playlist from the server
+            fetch(`/get_songs/${playlistName}`)
+                .then(response => response.json())
+                .then(songs => {
+                    const modalSongsContainer = document.getElementById('modalSongsContainer');
+                    modalSongsContainer.innerHTML = ''; // Clear previous content
+
+                    // Display the songs in the modal container
+                    songs.forEach(song => {
+                        modalSongsContainer.innerHTML += `<p>${song.song_name} by ${song.creator_name}</p>`;
+                    });
+
+                    // Display the modal
+                    const modal = document.getElementById('songsModal');
+                    modal.style.display = 'block';
+                })
+                .catch(error => console.error('Error fetching songs:', error));
+        }
+
+        function closeModal() {
+            // Close the modal
+            const modal = document.getElementById('songsModal');
+            modal.style.display = 'none';
+        }
+        function addToPlaylist(songName, creatorName) {
+            // You can implement the logic to add the song to the playlist here
+            alert(`Add "${songName}" by ${creatorName} to the playlist!`);
+        }
+    </script>
+</body>
+</html>

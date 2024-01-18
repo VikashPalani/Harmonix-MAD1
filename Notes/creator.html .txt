@@ -1,0 +1,484 @@
+creator.html 
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh; /* Set minimum height to cover the whole viewport */
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header img {
+            height: 50px; /* Reduced the size */
+            width: auto; /* Ensures aspect ratio is maintained */
+        }
+
+        .header-buttons {
+            display: flex;
+        }
+
+        button {
+            padding: 12px 20px; /* Increased padding for a bigger button */
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #555;
+            transform: scale(1.05);
+        }
+
+        .header-buttons button {
+            margin-left: 10px;
+        }
+
+        .user-info-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            flex-direction: column; /* Added to arrange the name below the image */
+            margin-left: 50px; /* Increased margin */
+        }
+
+        .user-image {
+            border-radius: 50%; /* Perfect circle */
+            margin-bottom: 10px;
+            height: 200px; /* Adjust the size */
+            width: 200px; /* Adjust the size */
+            transition: transform 0.2s ease-in-out; /* Added hover effect */
+        }
+
+        .user-info:hover .user-image {
+            transform: scale(1.1); /* Added hover effect */
+        }
+
+        .user-info p {
+            margin: 0;
+            font-weight: bold;
+            font-size:larger;
+        }
+
+        .stats-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly; /* Adjusted to evenly space the elements */
+            width: 100%; /* Added to ensure full width */
+        }
+
+        .stats-box {
+            background-color: #f2f2f2;
+            padding: 20px;
+            text-align: center;
+            margin: 0 10px; /* Adjusted margin for even spacing */
+            border-radius: 10px;
+            flex: 1; /* Added to make each box take equal space */
+            max-width: 250px; /* Increased the width */
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out; /* Added hover effect */
+            font-weight: bold;
+        }
+
+        .stats-box:hover {
+            background-color: #9e9e9e; /* Added hover effect */
+            transform: scale(1.05); /* Added hover effect */
+        }
+
+        section {
+            margin-top: 20px;
+            flex: 1; /* Added to make the content flex to fill the remaining space */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 1px solid #ddd; /* Added border-bottom for a line effect */
+            padding-bottom: 10px; /* Added padding for spacing */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold; /* Make headings bold */
+        }
+
+        .add-song-button {
+            padding: 16px 24px; /* Increased padding for a bigger button */
+            background-color: #E35F21;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+            margin-top: 20px; /* Added margin at the top */
+        }
+
+        .add-song-button:hover {
+            background-color: #9c4117;
+            transform: scale(1.05);
+        }
+
+        hr {
+            margin-top: 20px; /* Adjusted margin */
+            border: none;
+            border-top: 1px solid #ddd;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            margin-top: auto; /* Push the footer to the bottom */
+        }
+
+        /* Lyrics Popup */
+        .lyrics-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 2px solid #333;
+            z-index: 1000;
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+        #addSongModalContainer {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Style for the modal header */
+        #addSongModalHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        /* Style for the modal title */
+        #addSongModalTitle {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Style for the modal close button */
+        #addSongModalClose {
+            cursor: pointer;
+            font-size: 20px;
+            color: #aaa;
+        }
+
+        /* Style for the form inputs */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">
+            <img src="/static/harmonix.png" alt="Logo">
+        </div>
+        <div class="header-buttons">
+            <button onclick="redirectToHome()"><span>Home</span></button>
+            <button onclick="redirectToLogout()"><span>Logout</span></button>
+        </div>
+    </header>
+
+    <div class="user-info-container">
+        <div class="user-info">
+            <img class="user-image" src="/static/creator1.jpg" alt="Creator Photo">
+            <p>{{ creator_name }}</p>
+        </div>
+        <div class="stats-container">
+            <div class="stats-box">
+                <p>Total Songs</p>
+                <p>{{ total_songs }}</p>
+            </div>
+            <div class="stats-box">
+                <p>Average Rating</p>
+                <p>{{ avg_rating }}</p>
+            </div>
+            <div class="stats-box">
+                <p>Genre</p>
+                <p>{{ genre }}</p>
+            </div>
+        </div>
+    </div>
+
+    <section>
+        <h2>Your Uploads</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Song Name</th>
+                    <th>View Lyrics</th>
+                    <th>Edit Lyrics</th>
+                    <th>Delete Song</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for song in songs %}
+                <tr>
+                    <td>{{ song.song_name }}</td>
+                    <td><button class="view-button" onclick="viewLyrics('{{ song.song_id }}')">View</button></td>
+                    <td><button class="edit-button" onclick="openEditLyricsModal('{{ song.song_id }}', '{{ song.lyrics }}')">Edit</button></td>
+                    <td><button class="delete-button" onclick="confirmDelete('{{ song.song_id }}', '{{ song.song_name }}')">Delete</button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <button class="add-song-button" onclick="openAddSongModal()">Add New Song</button>
+        <br>
+        <br>
+        <!-- Add New Song Modal -->
+        <div id="addSongModalContainer">
+            <div id="addSongModalHeader">
+                <div id="addSongModalTitle">Add New Song</div>
+                <div id="addSongModalClose" onclick="closeAddSongModal()">&times;</div>
+            </div>
+            <div id="addSongModalContent">
+                <!-- Add New Song Form -->
+                <form id="addSongForm" method="post" action="{{ url_for('add_song') }}">
+                    <div class="form-group">
+                        <label for="song_name" class="form-label">Song Name:</label>
+                        <input type="text" name="song_name" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="genre" class="form-label">Genre:</label>
+                        <input type="text" name="genre" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="duration" class="form-label">Duration:</label>
+                        <input type="text" name="duration" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lyrics" class="form-label">Lyrics:</label>
+                        <textarea name="lyrics" class="form-control" rows="4" required></textarea>
+                    </div>
+
+                    <!-- Additional Fields -->
+                    <div class="form-group">
+                        <label for="song_path" class="form-label">Song Path:</label>
+                        <input type="text" name="song_path" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image_path" class="form-label">Image Path:</label>
+                        <input type="text" name="image_path" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="avg_rating" class="form-label">Average Rating:</label>
+                        <input type="text" name="avg_rating" class="form-control" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Add Song</button>
+                </form>
+            </div>
+        </div>
+        <div id="editLyricsModalContainer">
+            <div id="editLyricsModalHeader">
+                <div id="editLyricsModalTitle">Edit Lyrics</div>
+                <div id="editLyricsModalClose" onclick="closeEditLyricsModal()">&times;</div>
+            </div>
+            <div id="editLyricsModalContent">
+                <!-- Editable Lyrics Form -->
+                <form id="editLyricsForm">
+                    <div class="form-group">
+                        <label for="editLyrics" class="form-label">Lyrics:</label>
+                        <textarea id="editLyrics" class="form-control" rows="4" required></textarea>
+                    </div>
+    
+                    <button type="button" class="btn btn-primary" onclick="updateLyrics()">Update</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+
+    <footer>
+        <p>&copy; Harmonix. All rights reserved.</p>
+        <p>Contact: contact@harmonix.com</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+    <div id="lyricsPopup" class="lyrics-popup">
+        <span class="close-popup" onclick="closeLyricsPopup()">&times;</span>
+        <h3>Lyrics</h3>
+        <pre id="lyricsContent"></pre>
+    </div>
+    <!-- JavaScript for Lyrics Popup -->
+    <script>
+        function confirmDelete(songId, songName) {
+        var result = window.confirm(`Are you sure you want to delete the song "${songName}"?`);
+
+        if (result) {
+            // If the user confirms, perform the deletion
+            deleteSong(songId);
+        }
+    }
+
+    function deleteSong(songId) {
+        // Perform the deletion in the database using an AJAX request
+        fetch(`/delete_song/${songId}`, {
+            method: 'DELETE',
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Song deleted successfully:', data);
+            // You may want to handle UI updates or feedback to the user here
+            // For example, you can reload the page or remove the deleted song from the table
+        })
+        .catch(error => console.error('Error deleting song:', error));
+    }
+        function openEditLyricsModal(songId, existingLyrics) {
+        currentSongId = songId;
+        document.getElementById('editLyrics').value = existingLyrics;
+        document.getElementById('editLyricsModalContainer').style.display = 'block';
+    }
+
+    // Function to close the edit lyrics modal
+    function closeEditLyricsModal() {
+        document.getElementById('editLyricsModalContainer').style.display = 'none';
+    }
+
+    // Function to update lyrics
+    function updateLyrics() {
+        const editedLyrics = document.getElementById('editLyrics').value;
+
+        // Perform the update in the database using an AJAX request
+        fetch(`/update_lyrics/${currentSongId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ lyrics: editedLyrics }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Lyrics updated successfully:', data);
+            // You may want to handle UI updates or feedback to the user here
+            closeEditLyricsModal();
+        })
+        .catch(error => console.error('Error updating lyrics:', error));
+    }
+        function openAddSongModal() {
+            document.getElementById('addSongModalContainer').style.display = 'block';
+        }
+
+        function closeAddSongModal() {
+            document.getElementById('addSongModalContainer').style.display = 'none';
+        }
+        function redirectToHome() {
+            window.location.href = '/';
+        }
+        function redirectToLogout() {
+            window.location.href = '/creator_login';
+        }
+        function viewLyrics(songId) {
+            fetch(`/get_lyrics/${songId}`)
+                .then(response => response.text())
+                .then(lyrics => {
+                    document.getElementById('lyricsContent').textContent = lyrics;
+                    document.getElementById('lyricsPopup').style.display = 'block';
+                })
+                .catch(error => console.error('Error fetching lyrics:', error));
+        }
+
+        function closeLyricsPopup() {
+            document.getElementById('lyricsPopup').style.display = 'none';
+        }
+    </script>
+
+</body>
+
+</html>

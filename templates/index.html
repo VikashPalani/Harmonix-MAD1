@@ -1,0 +1,231 @@
+<!--Harmonix Index Page-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Harmonix - Music Streaming App</title>
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
+  <style>
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 20px;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo img {
+      height: 50px;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+    }
+
+    .search-bar input[type="text"] {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-right: 5px;
+      transition: border-color 0.3s ease-in-out;
+    }
+
+    .search-bar input[type="text"]:focus {
+      outline: none;
+      border-color: #555;
+    }
+
+    .search-bar .search-btn,
+    .login-buttons a {
+      padding: 8px 15px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-left: 10px;
+      transition: background-color 0.3s ease-in-out;
+      text-decoration: none;
+    }
+
+    .login-buttons a:hover {
+      background-color: #555;
+    }
+
+    .slider {
+      width: 100%;
+      height: 500px;
+      overflow: hidden;
+      position: relative;
+      margin-top: 0px;
+    }
+
+    .slider img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .slider img:not(:first-child) {
+      opacity: 0;
+    }
+
+    .song-list {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 20px;
+      margin-top: 20px;
+    }
+
+    .song {
+      text-align: center;
+      transition: transform 0.3s ease-in-out;
+      margin: 0 10px;
+    }
+
+    .song img {
+      width: 100%;
+      border-radius: 8px;
+      margin-bottom: 5px;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .song img:hover {
+      transform: scale(0.9);
+    }
+
+    .song p {
+      margin: 0;
+      font-size: 18px;
+      color: #333;
+    }
+
+    footer {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      margin-top: 10px;
+    }
+
+    .button-link {
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      border: 1px solid #333;
+      margin: 10px;
+      display: inline-block;
+      transition: background-color 0.3s, color 0.3s;
+      color: #ffffff;
+    }
+
+    .button-link:hover {
+      background-color: #201f1f;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <div class="logo">
+        <img src="/static/Harmonix.png" alt="Harmionix Logo">
+      </div>
+      <div class="header-controls">
+        <div class="search-bar">
+          <input type="text" placeholder="Search">
+        </div>
+        <div class="login-buttons">
+          <a href="/login" class="button-link">Login</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="slider">
+      <img src="https://img.freepik.com/free-psd/horizontal-banner-template-neon-jazz-night-event_23-2148979954.jpg?w=826&t=st=1702393932~exp=1702394532~hmac=d1bae613ca346d0fa21998d0d5fc8df5db97e6aaa3ed0d1f76b4c386494f5ecf" alt="Image 1" class="responsive">
+      <img src="https://img.freepik.com/free-psd/music-party-concept-banner-template_23-2148512225.jpg?w=826&t=st=1702393907~exp=1702394507~hmac=7c7a4e900c04abf4fb3a1aba31d21bd193b85fdf2935aae031c8f3c2f78caea9" alt="Image 2" class="responsive">
+      <img src="https://img.freepik.com/free-psd/music-concert-youtube-cover-template_23-2149959361.jpg?w=826&t=st=1702393922~exp=1702394522~hmac=bd941ff833137a14fddf7e8d48f48eafcd0958505c144444169052705fb15f27" alt="Image 3" class="responsive">
+      <img src="https://img.freepik.com/free-psd/urban-music-horizontal-banner-template_23-2148901776.jpg?w=826&t=st=1702394651~exp=1702395251~hmac=ec035d8f41cae371729b9c6a894e54a867836035475051c634e544c7a93b513a" alt="Image 4" class="responsive">
+      <img src="https://img.freepik.com/free-psd/music-shop-horizontal-banner-template_23-2148855473.jpg?w=826&t=st=1702393873~exp=1702394473~hmac=52f880d70884d6b660b9030ae3f8a27ba85a763ef7df2034a03abb8d7e566490" alt="Image 5" class="responsive">
+    </div>
+
+    <div class="song-list">
+      <div class="song">
+        <img src="/static/alone.jpg" alt="Song 1">
+        <p>Alone</p>
+      </div>
+      <div class="song">
+        <img src="/static/closetome.png" alt="Song 2">
+        <p>Close To Me</p>
+      </div>
+      <div class="song">
+        <img src="/static/devileyes.png" alt="Song 3">
+        <p>Devil Eyes</p>
+      </div>
+      <div class="song">
+        <img src="/static/hope.png" alt="Song 4">
+        <p>Hope</p>
+      </div>
+      <div class="song">
+        <img src="/static/Intentions.jpg" alt="Song 5">
+        <p>Intentions</p>
+      </div>
+      <div class="song">
+        <img src="/static/mine.jpg" alt="Song 6">
+        <p>Mine</p>
+      </div>
+      <div class="song">
+        <img src="/static/movedon.jpg" alt="Song 7">
+        <p>Moved On</p>
+      </div>
+      <div class="song">
+        <img src="/static/Natural.png" alt="Song 8">
+        <p>Natural</p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let slideIndex = 0;
+    const slides = document.querySelectorAll('.slider img');
+    const slideCount = slides.length;
+
+    function showSlides() {
+      slides.forEach((slide) => (slide.style.opacity = 0));
+      slideIndex = (slideIndex + 1) % slideCount;
+      slides[slideIndex].style.opacity = 1;
+    }
+
+    setInterval(showSlides, 3000);
+  </script>
+
+  <footer>
+    <p>&copy; Harmonix. All rights reserved.</p>
+    <br>
+    <p>Contact: contact@harmonix.com</p>
+  </footer>
+</body>
+</html>

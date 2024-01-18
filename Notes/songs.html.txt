@@ -1,0 +1,378 @@
+songs.html
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            width: 170px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .header-title {
+            flex: 1;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .right-header {
+            text-align: right;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            margin-left: 10px;
+        }
+
+        .search-bar-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .search-bar {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .search-button {
+            padding: 8px 16px;
+            background-color: #555; /* Darker grey color for other buttons */
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            margin-right: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-button:hover {
+            background-color: #333; /* Even darker grey on hover */
+        }
+
+        .separator {
+            border-bottom: 2px solid #ccc;
+            margin: 10px 0;
+        }
+
+        .table-container {
+            width: 100%;
+            margin-top: 20px;
+            overflow-x: auto;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        table {
+            width: 98%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-right: 10px;
+        }
+
+        #adminDashboardButton {
+            background-color: #E35F21;
+            color: #fff;
+        }
+
+        #adminDashboardButton:hover {
+            background-color: #FF7F50;
+        }
+
+        .lyrics-button,
+        .flag-song-button,
+        .delete-button {
+            background-color: #555;
+            color: #fff;
+        }
+
+        .lyrics-button:hover,
+        .flag-song-button:hover,
+        .delete-button:hover {
+            background-color: #333;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            margin-top: auto;
+        }
+        .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 800px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+    </style>
+    <title>Songs Detail</title>
+</head>
+
+<body>
+    <div class="header">
+        <div class="left-header">
+            <img class="logo" src="/static/Harmonix.png" alt="Logo">
+        </div>
+        <div class="header-title">
+            <h1>Song Details</h1>
+        </div>
+        <div class="right-header">
+            <button id="adminDashboardButton">Admin Dashboard</button>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="search-bar-container">
+            <h2>All Songs</h2>
+            <form action="{{ url_for('search_songs') }}" method="GET">
+                <input type="text" name="query" class="search-bar" placeholder="Search...">
+                <button type="submit" class="search-button">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="separator"></div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Song Name</th>
+                    <th>Lyrics</th>
+                    <th>Flag Song</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                    {% if search_results %}
+                        {% for song in search_results %}
+                            <tr>
+                                <td>{{ song.song_name }}</td>
+                                <td>
+                                    <!-- Button for Lyrics -->
+                                    <button class="lyrics-button" data-song-id="{{ song.song_id }}">Lyrics</button>
+                                </td>
+                                <td>
+                                    <!-- Button for Flag Song -->
+                                    <button class="flag-song-button">Flag Song</button>
+                                </td>
+                                <td>
+                                    <!-- Button for Delete -->
+                                    <button class="delete-button" data-song-id="{{ song.song_id }}">Delete</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        {% for song in songs %}
+                            <tr>
+                                <td>{{ song.song_name }}</td>
+                                <td>
+                                    <!-- Button for Lyrics -->
+                                    <button class="lyrics-button" data-song-id="{{ song.song_id }}">Lyrics</button>
+                                </td>
+                                <td>
+                                    <!-- Button for Flag Song -->
+                                    <button class="flag-song-button">Flag Song</button>
+                                </td>
+                                <td>
+                                    <!-- Button for Delete -->
+                                    <button class="delete-button" data-song-id="{{ song.song_id }}">Delete</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        <p>&copy; Harmonix. All rights reserved.</p>
+        <p>Contact: contact@harmonix.com</p>
+    </footer>
+
+    <script>
+        function deleteSong(songId) {
+        songId = parseInt(songId);
+        // Use AJAX to send a DELETE request to the server
+        fetch(`/delete_song/${songId}`, { method: 'DELETE' })
+            .then(response => {
+                if (response.ok) {
+                    // Reload the page after successful deletion
+                    location.reload();
+                } else {
+                    throw new Error('Failed to delete song');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting song:', error);
+                alert('Failed to delete song');
+            });
+    }
+
+    document.querySelectorAll('.delete-button').forEach(function (button) {
+        button.addEventListener('click', function (event) {
+            // Prevent the default form submission behavior
+            event.preventDefault();
+            // Extract the song ID from the data attribute
+            const songId = button.getAttribute('data-song-id');
+            // Confirm the deletion and then call the delete function
+            if (confirm('Are you sure you want to delete this song?')) {
+                deleteSong(songId);
+            }
+        });
+    });
+
+
+        function showLyrics(songId) {
+        songId = parseInt(songId);
+        // Use AJAX to fetch lyrics from the server
+        fetch(`/get_lyrics/${songId}`)
+            .then(response => response.text())
+            .then(lyrics => {
+                // Display lyrics in a modal
+                showModal(lyrics);
+            })
+            .catch(error => {
+                console.error('Error fetching lyrics:', error);
+                alert('Failed to fetch lyrics');
+            });
+    }
+
+    function showModal(lyrics) {
+        // Create a modal element
+        const modal = document.createElement('div');
+        modal.classList.add('modal');
+
+        // Create a close button
+        const closeButton = document.createElement('span');
+        closeButton.classList.add('close');
+        closeButton.innerHTML = '&times;';
+        closeButton.addEventListener('click', function () {
+            // Close the modal when the close button is clicked
+            modal.style.display = 'none';
+        });
+
+        // Create a content div for the lyrics
+        const content = document.createElement('div');
+        content.classList.add('modal-content');
+        content.textContent = lyrics;
+
+        // Append close button and content to modal
+        modal.appendChild(closeButton);
+        modal.appendChild(content);
+
+        // Append modal to the document body
+        document.body.appendChild(modal);
+
+        // Display the modal
+        modal.style.display = 'block';
+    }
+
+    document.querySelectorAll('.lyrics-button').forEach(function (button) {
+        button.addEventListener('click', function (event) {
+            // Prevent the default form submission behavior
+            event.preventDefault();
+            // Extract the song ID from the data attribute
+            const songId = button.getAttribute('data-song-id');
+            showLyrics(songId);
+        });
+    });
+
+        document.getElementById('adminDashboardButton').addEventListener('click', function () {
+            window.location.href = '/admin';
+        });
+
+        
+
+        document.querySelectorAll('.flag-song-button').forEach(function (button) {
+            button.addEventListener('click', function () {
+                alert("Flag Song button clicked");
+            });
+        });
+
+    
+    </script>
+</body>
+
+</html>
+

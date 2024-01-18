@@ -1,0 +1,371 @@
+user.html 
+
+<!--Harmonix User Page-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+
+    header img {
+      height: 50px;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+    }
+
+    input[type="text"] {
+      padding: 8px;
+      border: none;
+      border-radius: 4px;
+      margin-right: 8px;
+    }
+
+    button {
+      padding: 8px 12px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+    }
+
+    button:hover {
+      background-color: #555;
+      transform: scale(1.05);
+    }
+
+    .header-buttons button {
+      margin-left: 10px;
+    }
+
+    .section {
+      margin: 20px;
+    }
+
+    h2 {
+      color: #333;
+      font-size: 20px;
+      text-align: center;
+    }
+
+    .list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .item {
+      width: 23%;
+      margin: 10px 0;
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease-in-out;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .item:hover {
+      transform: scale(1.05);
+    }
+
+    .item img {
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .lyrics-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 80%;
+      background-color: rgba(0, 0, 0, 0.9);
+      color: #fff;
+      display: none;
+      align-items: flex-start;
+      justify-content: flex-start;
+      text-align: left;
+      opacity: 100;
+      transition: opacity 0.3s ease-in-out;
+      z-index: 1; /* Set z-index to 1 to bring it above the rating */
+    }
+
+    .item:hover .lyrics-container {
+      display: flex;
+      opacity: 1;
+    }
+
+    .lyrics-container p {
+      margin: 0;
+      font-size: 14px;
+      max-height: 100%;
+      overflow-y: auto;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .rating {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .rating p {
+      margin-right: 10px;
+      font-weight: bold;
+    }
+
+    .star {
+      font-size: 20px;
+      color: #ccc;
+      cursor: pointer;
+    }
+
+    .star:hover,
+    .star.active {
+      color: #FFD700; /* Adjust color as needed */
+    }
+
+    .details {
+      margin-top: 10px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .details-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+
+    .details p {
+      margin: 5px 0;
+    }
+
+    .details strong {
+      font-size: 16px;
+      color: #333;
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .creators-section {
+      margin: 20px;
+      text-align: center;
+    }
+
+    .creators-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+
+    .creator-item {
+      width: 15%;
+      margin: 10px 0;
+      text-align: center;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease-in-out;
+      border-radius: 50%;
+    }
+
+    .creator-item:hover {
+      transform: scale(1.1);
+    }
+
+    .creator-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .creators-names {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+
+    .creator-name {
+      width: 15%;
+      text-align: center;
+      font-size: 20px;
+      margin: 10px 0;
+    }
+
+    footer {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      margin-top: 10px;
+    }
+
+    .user-info {
+      background-color: #444444;
+      color: #fff;
+      padding: 10px;
+      text-align: left;
+      margin-bottom: 20px;
+      margin-top: 15px;
+    }
+
+    .user-info p {
+      margin: 0;
+      font-size: 26px;
+    }
+  </style>
+  <title>User Page</title>
+</head>
+
+<body>
+  <header>
+    <form action="{{ url_for('search') }}" method="GET">
+      <input type="text" name="query" placeholder="Search...">
+      <button type="submit">Search</button>
+    </form>
+    <img src="/static/Harmonix.png" alt="Harmionix Logo" >
+    <div class="header-buttons">
+      <button onclick="openCreatorLogin()">Creator Login</button>
+      <button onclick="playlist()">My Playlists</button>
+      <button onclick="signOut()">Log Out</button>
+    </div>
+  </header>
+  
+  <div class="user-info">
+    <p><strong>Welcome User!</strong></p>
+  </div>
+  <div class="section">
+    <h2>SONGS</h2>
+    <div class="list">
+
+      {% if query %}
+        <p>Search results for "{{ query }}":</p>
+      {% endif %}
+      {% for song in songs %}
+        <div class="item">
+          <img src="/{{ song.image_path }}" alt="{{ song.song_name }}" class="song-image">
+          <div class="lyrics-container">
+            <p>{{ song.lyrics }}</p>
+          </div>
+          <div class="details">
+            <div class="details-row">
+              <p><strong>Name: {{ song.song_name }}</strong></p>
+              <p><strong>By: {{ song.creator_name }}</strong></p>
+            </div>
+            <div class="details-row">
+              <p><strong>Genre: {{ song.genre }}</strong></p>
+              <p><strong>Average Rating: {{ song.avg_rating }}</strong></p>
+            </div>
+            <audio controls>
+              <source src="/{{ song.song_path }}" type="audio/mpeg">
+            </audio>
+            <div class="rating">
+              <p>Rate this song:</p>
+              <!-- Add five star icons here -->
+              {% for star in range(1, 6) %}
+                <span class="star" onclick="rateSong({{ song.id }}, {{ star }})">&#9733;</span>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="creators-section">
+    <h2>CREATORS</h2>
+
+    <div class="creators-list">
+      <!-- ... (existing creators-list content) ... -->
+    </div>
+
+    <div class="creators-names">
+      <!-- ... (existing creators-names content) ... -->
+    </div>
+  </div>
+
+  <script>
+    function search() {
+      console.log('Search button clicked');
+    }
+
+    function signOut() {
+      window.location.href = '/';
+    }
+
+    function openCreatorLogin() {
+      window.location.href = '/creator_login';
+    }
+
+    function playlist() {
+      window.location.href = '/playlist';
+    }
+
+    function rateSong(songId, rating) {
+      // Implement the logic to send the rating to the server or handle it as needed
+      console.log(`Rated Song ${songId} with ${rating} stars`);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const items = document.querySelectorAll('.item');
+
+      items.forEach(item => {
+        item.addEventListener('mouseover', function () {
+          const lyricsContainer = this.querySelector('.lyrics-container');
+          if (lyricsContainer) {
+            lyricsContainer.style.display = 'flex';
+          }
+        });
+
+        item.addEventListener('mouseout', function () {
+          const lyricsContainer = this.querySelector('.lyrics-container');
+          if (lyricsContainer) {
+            lyricsContainer.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+
+  <footer>
+    <p>&copy; Harmonix. All rights reserved.</p>
+    <p>Contact: contact@harmonix.com</p>
+  </footer>
+</body>
+
+</html>
